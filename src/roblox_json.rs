@@ -7,7 +7,13 @@ pub struct RobloxJSONResponse {
 }
 
 impl RobloxJSONResponse {
-    pub fn response_to_json(response: hyper::body::Bytes) -> Self {
-        serde_json::from_slice(&response[..]).unwrap()
+    pub fn response_to_json(response: &hyper::body::Bytes) -> Option<Self> {
+        match serde_json::from_slice(&response[..]) {
+            Ok(json) => Some(json),
+            Err(e) => {
+                println!("Error: {}", e);
+                None
+            }
+        }
     }
 }
